@@ -10,18 +10,14 @@ ASSETS = THIS_DIR / "assets"
 CSS_FILE = ASSETS / "style" / "style.css"
 LOTTIE_ANIMATION = ASSETS / "animation_holiday.json"
 
-# Exception handling
-if not ASSETS.exists():
-    raise FileNotFoundError(f"No assets directory found at {ASSETS}")
-
-if not CSS_FILE.exists():
-    raise FileNotFoundError(f"No CSS file found at {CSS_FILE}")
-
-if not LOTTIE_ANIMATION.exists():
-    raise FileNotFoundError(f"No lottie animation found at {LOTTIE_ANIMATION}")
+# Check if file exist
+def check_file_exists(file_path):
+    if not file_path.exists():
+        raise FileNotFoundError(f"No file found at {file_path}")
 
 # Function to load and display the Lottie animation
 def load_lottie_animation(file_path):
+    check_file_exists(file_path)
     with open(file_path, "r") as f:
         return json.load(f)
 
@@ -34,6 +30,12 @@ def get_person_name():
     query_params = st.experimental_get_query_params()
     return query_params.get("name", ["Friend"])[0]
 
+# Function to apply custom CSS
+def apply_custom_css(file_path):
+    check_file_exists(file_path)
+    with open(CSS_FILE) as f:
+        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)    
+
 # Page configuration
 st.set_page_config(
     page_title="Happy Holidays",
@@ -45,8 +47,7 @@ st.set_page_config(
 run_snow_animation()
 
 # Apply custom CSS
-with open(CSS_FILE) as f:
-    st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+apply_custom_css(CSS_FILE)
 
 # Display header with personalized name
 PERSON_NAME = get_person_name()

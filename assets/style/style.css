@@ -1,2 +1,8 @@
+/* Style for  header & main page*/
 #MainMenu {visibility: hidden;}
 header {visibility: hidden;}
+
+/* Style for body element */
+body {
+    text-align: center;
+}
